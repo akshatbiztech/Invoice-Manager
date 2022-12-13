@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
+import logger from "./logger";
 
 const app = express();
 
@@ -16,6 +17,9 @@ const PORT = process.env.PORT || 5000;
 mongoose
   .connect(CONNECTION_URL)
   .then(() =>
-    app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
+    app.listen(PORT, () => logger.info(`Server running on port: ${PORT}`))
   )
-  .catch((error) => console.log(error.message));
+  .catch((error) => {
+    logger.error("Unable to connect");
+    logger.error(error);
+  });
