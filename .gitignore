@@ -1,3 +1,3 @@
-server/src/dist/
+server/src/dist
 client/node_modules
 server/node_modules
