@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const postSchema = new mongoose.Schema({
+const invoiceSchema = new mongoose.Schema({
   invoice_num: Number,
   name: String,
   mobile_number: Number,
@@ -13,6 +13,6 @@ const postSchema = new mongoose.Schema({
   totalAmount: Number,
 });
 
-const InvoiceMessage = mongoose.model("InvoiceMessage", postSchema);
+const InvoiceMessage = mongoose.model("InvoiceMessage", invoiceSchema);
 
 export default InvoiceMessage;
