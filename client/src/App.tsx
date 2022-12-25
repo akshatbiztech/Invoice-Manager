@@ -1,15 +1,13 @@
 import React from "react";
-import { Container, AppBar, Typography } from "material-ui/core";
+import Invoicenavbar from "./components/Nav/nav";
+import InvoiceForm from "./components/Form/form";
 
 function App() {
   return (
-    <Container maxwidth="lg">
-      <AppBar position="static" color="inherit">
-        <Typography variant="h2" align="center">
-          Memories
-        </Typography>
-      </AppBar>
-    </Container>
+    <>
+      <Invoicenavbar></Invoicenavbar>
+      <InvoiceForm />
+    </>
   );
 }
 
