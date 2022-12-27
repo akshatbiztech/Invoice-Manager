@@ -3,36 +3,77 @@ import mongoose from "mongoose";
 import cors from "cors";
 import logger from "./library/logger";
 import { config } from "./config/config";
-import postRoutes from "./routes/invoice";
+import invoiceRoutes from "./routes/Invoice";
+import http from "http";
 
 const app = express();
-
-app.use("/posts", postRoutes);
-
-app.use(express.json({ limit: "30mb" }));
-app.use(express.urlencoded({ limit: "30mb", extended: true }));
-app.use(cors());
-
-// const CONNECTION_URL =
-//   "mongodb+srv://akshat:akshat@cluster0.mt7ym69.mongodb.net/?retryWrites=true&w=majority";
-
-// const PORT = process.env.SERVER_PORT || 5000;
 
 mongoose
   .connect(config.mongo.url)
   .then(() => {
-    app.listen(config.server.port, () =>
-      logger.info(`Server running on port: ${config.server.port}`)
-    );
-    //StartServer();
+    logger.info("Connected to MongoDB");
+    StartServer();
   })
   .catch((error) => {
     logger.error("Unable to connect");
     logger.error(error);
   });
 
-// const StartServer = () => {
-//   Router.use((req,res,next) => {
-//     logger.info
-//   })
-// };
+const StartServer = () => {
+  app.use((req, res, next) => {
+    logger.info(
+      `Incoming -> Method: [${req.method}] - Url: [${req.url}] - IP: [${req.socket.remoteAddress}]`
+    );
+
+    res.on("finish", () => {
+      logger.info(
+        `Incoming -> Method: [${req.method}] - Url: [${req.url}] - IP: [${req.socket.remoteAddress}] - Status: [${res.statusCode}]`
+      );
+    });
+    next();
+  });
+
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(cors());
+
+  //Rules of the API
+  app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+
+    if (req.method == "OPTIONS") {
+      res.header(
+        "Access-Control-Allow-Methods",
+        "PUT, POST, PATCH, DELETE, GET"
+      );
+      return res.status(200).json({});
+    }
+    next();
+  });
+
+  //Routes
+  app.use("/invoices", invoiceRoutes);
+
+  //Healthcheck
+  app.get("/ping", (req, res, next) =>
+    res.status(200).json({ message: "pong" })
+  );
+
+  //Error handling
+  app.use((req, res, next) => {
+    const error = new Error("not found");
+    logger.error(error);
+
+    return res.status(404).json({ message: error.message });
+  });
+
+  http
+    .createServer(app)
+    .listen(config.server.port, () =>
+      logger.info(`Server running on port: ${config.server.port}`)
+    );
+};
