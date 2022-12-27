@@ -31,7 +31,7 @@ export const Schemas = {
       if_paid: Joi.boolean().required(),
     }),
     update: Joi.object<IInvoice>({
-      invoice_num: Joi.number(),
+      //invoice_num: Joi.number(),
       customer_name: Joi.string().required(),
       mobile_number: Joi.number().required().min(6000000000).max(9999999999),
       date: Joi.date().max("now"),

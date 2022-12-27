@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+//import autoIncrement from "mongoose-auto-increment";
 
 dotenv.config();
 
@@ -18,3 +19,5 @@ export const config = {
     port: SERVER_PORT,
   },
 };
+
+//export const autoinc = autoIncrement.initialize(config);

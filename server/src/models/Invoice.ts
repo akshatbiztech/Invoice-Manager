@@ -1,13 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
-
-//counter table
-// const counterSchema = new mongoose.Schema({
-//   id: { type: String },
-//   seq: { type: Number },
-// });
-
-//export const counterModel = mongoose.model("counter", counterSchema);
-
+import autoIncrement from "mongoose-auto-increment";
+import { config } from "../config/config";
 export interface IInvoice {
   invoice_num: Number;
   customer_name: String;
@@ -26,12 +19,12 @@ export interface IInvoiceModel extends IInvoice, Document {}
 
 const InvoiceSchema = new mongoose.Schema(
   {
-    invoice_num: { type: Number, required: true },
-    customer_name: { type: String, required: true },
+    invoice_num: { type: Number, unique: true },
+    customer_name: { type: String, required: true, trim: true },
     mobile_number: { type: Number, required: true },
     date: { type: Date, default: new Date(), required: true }, //{ type: String, required: true }
     cart: {
-      product: { type: Array, required: true },
+      product: { type: Array, required: true, unique: true },
       rate: { type: Array, required: true },
       qty: { type: Array, required: true },
     },
@@ -42,5 +35,14 @@ const InvoiceSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+const connection = mongoose.createConnection(config.mongo.url);
+autoIncrement.initialize(connection);
+
+InvoiceSchema.plugin(autoIncrement.plugin, {
+  model: "Invoice",
+  field: "invoice_num",
+  startAt: 1,
+});
 
 export default mongoose.model<IInvoiceModel>("Invoice", InvoiceSchema);

@@ -5,6 +5,7 @@ import logger from "./library/logger";
 import { config } from "./config/config";
 import invoiceRoutes from "./routes/Invoice";
 import http from "http";
+import autoIncrement from "mongoose-auto-increment";
 
 const app = express();
 
@@ -18,6 +19,7 @@ mongoose
     logger.error("Unable to connect");
     logger.error(error);
   });
+autoIncrement.initialize(mongoose.connection);
 
 const StartServer = () => {
   app.use((req, res, next) => {
