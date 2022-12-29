@@ -1,6 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 import autoIncrement from "mongoose-auto-increment";
 import { config } from "../config/config";
+
 export interface IInvoice {
   invoice_num: Number;
   customer_name: String;

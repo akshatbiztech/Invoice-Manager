@@ -5,6 +5,7 @@ import readOne from "../controllers/readOne";
 import readAll from "../controllers/readAll";
 import update from "../controllers/update";
 import deleteInvoice from "../controllers/delete";
+import currentInvoice from "../controllers/getCounter";
 import { Schemas, ValidateJoi } from "../middleware/Joi";
 
 const router = express.Router();
@@ -16,6 +17,7 @@ router.post(
 );
 router.get("/get/:invoiceId", readOne.readInvoice);
 router.get("/get/", readAll.readAllInvoice);
+router.get("/getCount/", currentInvoice.getCounter);
 router.patch(
   "/update/:invoiceId",
   ValidateJoi(Schemas.invoice.update),

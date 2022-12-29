@@ -3,7 +3,11 @@ import mongoose, { DocTypeFromGeneric } from "mongoose";
 import logger from "../library/logger";
 import Invoice from "../models/Invoice";
 
-const createInvoice = (req: Request, res: Response, next: NextFunction) => {
+const createInvoice = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const {
     invoice_num,
     customer_name,
