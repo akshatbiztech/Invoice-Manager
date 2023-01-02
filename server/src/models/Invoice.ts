@@ -6,7 +6,7 @@ export interface IInvoice {
   invoice_num: Number;
   customer_name: String;
   mobile_number: Number;
-  date: String;
+  date: Date;
   cart: {
     product: [];
     rate: [];
@@ -25,7 +25,7 @@ const InvoiceSchema = new mongoose.Schema(
     mobile_number: { type: Number, required: true },
     date: { type: Date, default: new Date(), required: true }, //{ type: String, required: true }
     cart: {
-      product: { type: Array, required: true, unique: true },
+      product: { type: Array, required: true },
       rate: { type: Array, required: true },
       qty: { type: Array, required: true },
     },

@@ -2,7 +2,7 @@ type Invoice = {
   invoice_num: Number;
   customer_name: String;
   mobile_number: Number;
-  date: String;
+  date: Date;
   cart: {
     product: [];
     rate: [];
