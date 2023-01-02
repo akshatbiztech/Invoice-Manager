@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import mongoose, { DocTypeFromGeneric } from "mongoose";
 import logger from "../library/logger";
 import Invoice from "../models/Invoice";
+import { send_message } from "./sendMessage";
 
 const createInvoice = async (
   req: Request,
@@ -31,9 +32,15 @@ const createInvoice = async (
 
   return invoice
     .save()
-    .then((invoice) => {
+    .then(async (invoice) => {
       res.status(201).json({ invoice });
       logger.info("Invoice Succesfully Added to the Database!");
+      // if (await send_message(invoice) === 1) {
+      //   logger.info("Message Successfully Sent!");
+      // } else {
+      //   logger.error("Could Not Send Message");
+      // }
+      send_message(invoice);
     })
     .catch((error) => {
       res.status(500).json({ error });
